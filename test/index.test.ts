@@ -91,3 +91,26 @@ it("supports custom separators", () => {
     }
   `);
 });
+
+it("supports camelcase", () => {
+  expect(
+    treeToFlatMap(
+      {
+        propertyOne: {
+          propertyOneA: 1,
+        },
+        propertyTwo: {
+          propertyTwoA: {
+            propertyTwoB: 2,
+          },
+        },
+      },
+      { camelcase: true }
+    )
+  ).toMatchInlineSnapshot(`
+    Object {
+      "propertyOnePropertyOneA": 1,
+      "propertyTwoPropertyTwoAPropertyTwoB": 2,
+    }
+  `);
+});
