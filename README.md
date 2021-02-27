@@ -21,3 +21,24 @@ console.log(
 );
 // {"a.b.c": true, "d.e": 1, "f": "leaf"}
 ```
+
+`tree-to-flat-map` also supports the conversion of keys to camelCase.
+
+```ts
+console.log(
+  treeToFlatMap(
+    {
+      user: {
+        id: "40",
+      },
+      account: {
+        id: "2",
+        status: {
+          active: "true",
+        },
+      },
+    },
+    { camelcase: true }
+  )
+);
+```
