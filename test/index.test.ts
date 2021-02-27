@@ -96,21 +96,21 @@ it("supports camelcase", () => {
   expect(
     treeToFlatMap(
       {
-        propertyOne: {
-          propertyOneA: 1,
+        user: {
+          id: 40,
         },
-        propertyTwo: {
-          propertyTwoA: {
-            propertyTwoB: 2,
+        account: {
+          id: 2,
+          status: {
+            active: true,
           },
         },
       },
       { camelcase: true }
     )
-  ).toMatchInlineSnapshot(`
-    Object {
-      "propertyOnePropertyOneA": 1,
-      "propertyTwoPropertyTwoAPropertyTwoB": 2,
-    }
-  `);
+  ).toEqual({
+    accountId: 2,
+    accountStatusActive: true,
+    userId: 40,
+  });
 });
