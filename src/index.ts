@@ -14,6 +14,7 @@ type Tree<Leaf extends SupportedLeaf> = Readonly<{
 const _treeToFlatMap = <Leaf extends SupportedLeaf>(
   tree: _Tree<Leaf>,
   separator: string,
+  camelcase: boolean,
   path: string,
   result: FlatMap<Leaf>
 ): FlatMap<Leaf> => {
@@ -29,20 +30,25 @@ const _treeToFlatMap = <Leaf extends SupportedLeaf>(
     return Object.assign({ [path]: tree }, result);
   }
 
-  return Object.keys(tree).reduce(
-    (accumulator, key) =>
-      _treeToFlatMap(
-        tree[key],
-        separator,
-        path ? `${path}${separator}${key}` : key,
-        accumulator
-      ),
-    result
-  );
+  return Object.keys(tree).reduce((accumulator, key) => {
+    const newPath: string = camelcase
+      ? `${path}${key.charAt(0).toUpperCase()}${key.slice(1)}`
+      : `${path}${separator}${key}`;
+    return _treeToFlatMap(
+      tree[key],
+      separator,
+      camelcase,
+      path ? newPath : key,
+      accumulator
+    );
+  }, result);
 };
 
 /** Converts `tree` to a flat map with dot-separated keys. */
 export const treeToFlatMap = <Leaf extends SupportedLeaf = string>(
   tree: Tree<Leaf>,
-  { separator = "." }: Readonly<{ separator?: string }> = {}
-): FlatMap<Leaf> => _treeToFlatMap(tree, separator, "", {});
+  {
+    separator = ".",
+    camelcase = false,
+  }: Readonly<{ separator?: string; camelcase?: boolean }> = {}
+): FlatMap<Leaf> => _treeToFlatMap(tree, separator, camelcase, "", {});
